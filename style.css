@@ -1,5 +1,4 @@
 /* --- 1. 背景修复 & 护眼模式全局覆盖 --- */
-/* 这里的选择器针对 Gemini 2026 年最新的动态布局类名进行了强化 */
 body,
 [role="main"],
 main,
@@ -9,11 +8,9 @@ nav,
 .v-main,
 .app-root,
 .main-container,
-/* 针对底部输入框区域的精准覆盖 */
 .absolute.bottom-0.left-0.w-full,
 section[role="region"],
 div[data-test-id="rich-textarea-container"],
-/* 移除底部常见的白色渐变遮罩 */
 .bg-gradient-to-t,
 .from-white,
 .background-gradient {
@@ -21,7 +18,6 @@ div[data-test-id="rich-textarea-container"],
     background-image: none !important;
 }
 
-/* 移除侧边栏背景 */
 mat-sidenav,
 .chat-history-container,
 .side-nav-wrapper {
@@ -39,7 +35,7 @@ mat-sidenav,
     margin: 0 auto !important;
 }
 
-/* --- 3. 你原本的目录插件完整代码 (完全保留/替换) --- */
+/* --- 3. 目录插件样式 --- */
 #gemini-index-container {
     position: fixed !important;
     right: 20px;
@@ -49,7 +45,6 @@ mat-sidenav,
     display: flex;
     flex-direction: row-reverse;
     align-items: flex-start;
-
     opacity: 0.45;
     transition: opacity 0.2s ease;
 }
@@ -117,7 +112,7 @@ mat-sidenav,
     border-radius: 10px;
 }
 
-/* --- 4. 对话框缩小/隐形逻辑 (保持与你 js 匹配) --- */
+/* --- 4. 对话框缩小/隐形逻辑 --- */
 .input-area-container,
 div[class*="input-area"],
 section[class*="input-area"] {
@@ -131,15 +126,15 @@ section[class*="input-area"] {
     width: 60px !important;
     height: 60px !important;
     min-height: 60px !important;
-    border-radius: 30px !important; /* 圆形状态 */
+    border-radius: 30px !important;
     overflow: hidden !important;
-    background: #89AC46 !important; /* 使用 Index 同色系 */
+    background: #89AC46 !important;
     cursor: pointer !important;
     padding: 0 !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    opacity: 0.3 !important; /* 深度隐形 */
+    opacity: 0.3 !important;
     box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
     z-index: 2147483646 !important;
 }
@@ -149,16 +144,31 @@ section[class*="input-area"] {
     transform: scale(1.1);
 }
 
-/* 缩小状态下彻底隐藏输入框内的所有按钮、提示词、附件图标等 */
+/* 缩小状态下隐藏内容 */
 .minimized-chat-box * {
     display: none !important;
 }
 
-/* 如果需要在球内显示一个标识，可以通过伪元素添加 */
 .minimized-chat-box::after {
     content: "Chat";
     display: block !important;
     color: white;
     font-size: 12px;
     font-weight: bold;
+}
+
+/* --- 5. 新增：固定按钮适配样式 --- */
+#chat-pin-toggle {
+    user-select: none;
+    transition: all 0.2s ease;
+}
+
+#chat-pin-toggle:hover {
+    filter: brightness(1.2);
+    transform: translateY(-1px);
+}
+
+/* 修正：确保在展开状态下，固定按钮不被第4部分的通配符隐藏 */
+[data-optimized="true"]:not(.minimized-chat-box) #chat-pin-toggle {
+    display: block !important;
 }
