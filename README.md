@@ -17,7 +17,7 @@ Click the green "Code" button and select "Download ZIP". Once downloaded, extrac
 Step 2: Install in Google Chrome
 Open the Chrome browser, type chrome://extensions/ in the address bar, and press Enter.
 
-In the top right corner of the page, enable the "Developer mode" switch. Click the "Load unpacked" button that appears in the top left, then select the folder you just extracted (the one containing the manifest.json file).
+In the top right corner of the page, enable the "Developer mode" switch. Click the "Load unpacked" button that appears in the top left, and simply select the folder you just extracted.
 
 Step 3: Getting Started
 Open the Gemini official website. You will notice the background has switched to an eye-friendly color.
@@ -26,7 +26,7 @@ Hover your mouse over the green "INDEX" bubble on the right to expand the auto-g
 
 ---
 
-🟢Gemini UI Optimizer 🇨🇳 中文版使用教学
+🟢 Gemini UI Optimizer 🇨🇳 中文版使用教学
 这是一个专门为 Gemini 网页版开发的 UI 优化插件，可以实现：
 
 护眼模式：自动切换背景色，缓解长时间看屏幕的疲劳。
@@ -39,10 +39,15 @@ Hover your mouse over the green "INDEX" bubble on the right to expand the auto-g
 
 第一步：获取插件代码
 访问项目地址：https://github.com/Marcia-van/Gemini_UI_Optimizer
+
 点击绿色的 "Code" 按钮，选择 "Download ZIP"。下载后，将压缩包解压到你电脑的一个固定文件夹中。
 
 第二步：在谷歌浏览器（Chrome）中安装
-打开 Chrome 浏览器，在地址栏输入 chrome://extensions/ 并回车。在页面右上角，开启 “开发者模式” (Developer mode) 开关。点击左上角出现的 “加载已解压的扩展程序” (Load unpacked)，选择包含 manifest.json 的解压文件夹。
+打开 Chrome 浏览器，在地址栏输入 chrome://extensions/ 并回车。在页面右上角，开启 “开发者模式” (Developer mode) 开关。
+
+点击左上角出现的 “加载已解压的扩展程序” (Load unpacked)，直接选择你刚才解压出来的那个文件夹即可。
 
 第三步：开始使用
-打开 Gemini 官网。你会发现背景变成了护眼色。将鼠标悬停在右侧绿色的 "INDEX" 小球上，即可展开自动生成的目录。点击右下角的 "Chat" 小球可快速唤回输入框。
+打开 Gemini 官网。你会发现背景变成了护眼色。
+
+将鼠标悬停在右侧绿色的 "INDEX" 小球上，即可展开自动生成的目录。点击右下角的 "Chat" 小球可快速唤回输入框。
