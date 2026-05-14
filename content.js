@@ -104,16 +104,40 @@ function initService() {
     setupChatBoxToggle();
 }
 
-// --- 对话框逻辑 (已增加固定/收起切换) ---
 function setupChatBoxToggle() {
     const inputArea = document.querySelector('.input-area-container, [class*="input-area"], section[role="region"]');
-    if (!inputArea || inputArea.hasAttribute('data-optimized')) return;
 
+    // 如果找不到输入框，直接退出
+    if (!inputArea) return;
+
+    // --- 新增判断：没有任何对话内容时，执行“提拉”位置，但不执行“收起”逻辑 ---
+    const hasConversations = document.querySelectorAll('.query-text, .user-query-content, [data-test-id="user-query"]').length > 0;
+
+    if (!hasConversations) {
+        // 场景：首页。我们把框往上提，避免遮挡下方建议卡片
+        inputArea.style.marginTop = '-120px'; // 这个负值越大，向上提得越高
+        inputArea.style.transition = 'margin 0.3s ease';
+        // 首页状态下移除收起类名，确保它是大的
+        inputArea.classList.remove('minimized-chat-box');
+
+        // 重要：首页不标记 data-optimized，不创建📌按钮，直接返回
+        return;
+    } else {
+        // 场景：对话页。重置 margin，准备进入优化逻辑
+        if (!inputArea.hasAttribute('data-optimized')) {
+            inputArea.style.marginTop = '0px';
+        }
+    }
+
+    // 如果已经处理过了（即已经发过消息且按钮已创建），则退出
+    if (inputArea.hasAttribute('data-optimized')) return;
+
+    // 执行到这里，说明已经有对话了，开始执行优化逻辑
     inputArea.setAttribute('data-optimized', 'true');
     inputArea.classList.add('minimized-chat-box');
     inputArea.style.position = 'relative';
 
-// 创建固定切换开关
+    // 创建固定切换开关
     let isPinned = false;
     const pinBtn = document.createElement('div');
     pinBtn.id = 'chat-pin-toggle';
@@ -135,7 +159,7 @@ function setupChatBoxToggle() {
         transition: all 0.2s ease;
         border: 1px solid #555;
     `;
-    inputArea.style.overflow = 'visible'; // 确保外侧按钮不被隐藏
+    inputArea.style.overflow = 'visible';
     inputArea.appendChild(pinBtn);
 
     // 按钮点击逻辑
@@ -148,9 +172,9 @@ function setupChatBoxToggle() {
             pinBtn.style.borderColor = '#bde3c3';
             inputArea.classList.remove('minimized-chat-box');
         } else {
-            pinBtn.innerHTML = '📌 ';
-            pinBtn.style.background = '#bde3c3';
-            pinBtn.style.borderColor = '#bde3c3';
+            pinBtn.innerHTML = '📌';
+            pinBtn.style.background = '#333'; // 恢复深色，表示未固定
+            pinBtn.style.borderColor = '#555';
         }
     });
 
@@ -166,9 +190,7 @@ function setupChatBoxToggle() {
 
     // 自动收起逻辑
     document.addEventListener('click', (e) => {
-        // 如果处于“固定”状态，则跳过收起动作
         if (isPinned) return;
-
         if (!inputArea.contains(e.target) && !inputArea.classList.contains('minimized-chat-box')) {
             const textarea = inputArea.querySelector('textarea, [contenteditable="true"]');
             const hasText = textarea ? (textarea.value || textarea.innerText).trim().length > 0 : false;
@@ -176,5 +198,16 @@ function setupChatBoxToggle() {
         }
     });
 }
+// 替换掉最后的 setInterval
+const globalObserver = new MutationObserver(() => {
+    initService();
+});
 
-setInterval(initService, 2000);
+// 监听整个 body 的变化
+globalObserver.observe(document.body, {
+    childList: true,
+    subtree: true
+});
+
+// 初始执行一次
+initService();
