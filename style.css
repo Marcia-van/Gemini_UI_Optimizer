@@ -1,0 +1,164 @@
+/* --- 1. 背景修复 & 护眼模式全局覆盖 --- */
+/* 这里的选择器针对 Gemini 2026 年最新的动态布局类名进行了强化 */
+body,
+[role="main"],
+main,
+header,
+aside,
+nav,
+.v-main,
+.app-root,
+.main-container,
+/* 针对底部输入框区域的精准覆盖 */
+.absolute.bottom-0.left-0.w-full,
+section[role="region"],
+div[data-test-id="rich-textarea-container"],
+/* 移除底部常见的白色渐变遮罩 */
+.bg-gradient-to-t,
+.from-white,
+.background-gradient {
+    background-color: #EDFFF0 !important;
+    background-image: none !important;
+}
+
+/* 移除侧边栏背景 */
+mat-sidenav,
+.chat-history-container,
+.side-nav-wrapper {
+    background-color: #EDFFF0 !important;
+}
+
+/* --- 2. 界面拉宽优化 --- */
+.chat-view,
+.conversation-content,
+.main-content,
+.conversation-container,
+.message-content-wrapper {
+    max-width: 95% !important;
+    width: 95% !important;
+    margin: 0 auto !important;
+}
+
+/* --- 3. 你原本的目录插件完整代码 (完全保留/替换) --- */
+#gemini-index-container {
+    position: fixed !important;
+    right: 20px;
+    top: 90px;
+    z-index: 2147483647 !important;
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-start;
+
+    opacity: 0.45;
+    transition: opacity 0.2s ease;
+}
+
+#gemini-index-container:hover {
+    opacity: 1;
+}
+
+#index-trigger {
+    width: 50px;
+    height: 50px;
+    background: #89AC46;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    font-size: 11px;
+    user-select: none;
+}
+
+#index-list {
+    display: none;
+    background: white;
+    border: 1px solid #CADCAE;
+    width: 220px;
+    max-height: 450px;
+    overflow-y: auto;
+    border-radius: 12px;
+    box-shadow: -5px 5px 20px rgba(0,0,0,0.15);
+    margin-right: 15px;
+    padding: 8px 0;
+}
+
+#gemini-index-container:hover #index-list {
+    display: block;
+}
+
+.index-item {
+    padding: 10px 15px;
+    border-bottom: 1px solid #f5f5f5;
+    font-size: 13px;
+    color: #333 !important;
+    cursor: pointer !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: background 0.2s;
+}
+
+.index-item:hover {
+    background: #EDFFF0 !important;
+    color: #89AC46 !important;
+}
+
+#index-list::-webkit-scrollbar {
+    width: 4px;
+}
+
+#index-list::-webkit-scrollbar-thumb {
+    background: #CADCAE;
+    border-radius: 10px;
+}
+
+/* --- 4. 对话框缩小/隐形逻辑 (保持与你 js 匹配) --- */
+.input-area-container,
+div[class*="input-area"],
+section[class*="input-area"] {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.minimized-chat-box {
+    position: fixed !important;
+    bottom: 30px !important;
+    right: 40px !important;
+    width: 60px !important;
+    height: 60px !important;
+    min-height: 60px !important;
+    border-radius: 30px !important; /* 圆形状态 */
+    overflow: hidden !important;
+    background: #89AC46 !important; /* 使用 Index 同色系 */
+    cursor: pointer !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    opacity: 0.3 !important; /* 深度隐形 */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+    z-index: 2147483646 !important;
+}
+
+.minimized-chat-box:hover {
+    opacity: 1 !important;
+    transform: scale(1.1);
+}
+
+/* 缩小状态下彻底隐藏输入框内的所有按钮、提示词、附件图标等 */
+.minimized-chat-box * {
+    display: none !important;
+}
+
+/* 如果需要在球内显示一个标识，可以通过伪元素添加 */
+.minimized-chat-box::after {
+    content: "Chat";
+    display: block !important;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}

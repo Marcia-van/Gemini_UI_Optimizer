@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Gemini Eye-Care & Efficiency Pro",
+  "version": "1.2",
+  "description": "优化 Gemini 界面：护眼背景、宽屏显示、动态目录及对话框折叠",
+  "permissions": ["activeTab"],
+  "content_scripts": [
+    {
+      "matches": ["https://gemini.google.com/*"],
+      "css": ["style.css"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ]
+}
