@@ -137,6 +137,90 @@ function setupChatBoxToggle() {
     inputArea.classList.add('minimized-chat-box');
     inputArea.style.position = 'relative';
 
+// --- 在左下角添加与 Chat 按钮风格一致的 OK 按钮 ---
+    if (!document.getElementById('chat-ok-auto-btn')) {
+        const okBtn = document.createElement('div');
+        okBtn.id = 'chat-ok-auto-btn';
+        okBtn.innerHTML = 'OK';
+
+// 获取右侧 Chat 按钮的背景色（通常是带有透明度的淡绿色）来匹配
+okBtn.style = `
+    position: fixed; 
+    /* 自由调整位置：修改 right 和 bottom 的数值即可 */
+    right: 42px;           
+    bottom: 130px;          
+    width: 50px;           /* 缩小了一点 */
+    height: 40px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FFD95F; 
+    color: #C08552;        
+    cursor: pointer; 
+    font-size: 10px;       /* 配合星星形状，文字调小一点 */
+    font-weight: bold;     
+    z-index: 10000;        
+    backdrop-filter: blur(8px); 
+    transition: all 0.2s ease;
+    user-select: none;
+    /* 星星形状的关键代码 */
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+`;
+        document.body.appendChild(okBtn);
+
+        // 鼠标悬停交互：模拟原生的变色效果
+        okBtn.onmouseenter = () => {
+            okBtn.style.backgroundColor = '#ffd95f';
+            okBtn.style.transform = 'scale(1.05)';
+        };
+        okBtn.onmouseleave = () => {
+            okBtn.style.backgroundColor = '#ffd95f';
+            okBtn.style.transform = 'scale(1)';
+        };
+
+        // 点击自动发送 OK 的逻辑
+okBtn.onclick = (e) => {
+            e.stopPropagation();
+            // 1. 精准定位当前的输入框
+            const textarea = document.querySelector('.input-area-container textarea, [contenteditable="true"], textarea');
+
+            // 2. 改进的选择器：只寻找【输入框容器内部】的那个发送按钮，避开侧边栏和顶部的按钮
+            const inputContainer = document.querySelector('.input-area-container, [class*="input-area"]');
+            const sendBtn = inputContainer ? inputContainer.querySelector('button[aria-label*="发"], button[aria-label*="Send"], [data-test-id="send-button"]') : null;
+
+            if (textarea) {
+                // 填充 OK
+                if (textarea.tagName === 'TEXTAREA') {
+                    textarea.value = 'OK';
+                } else {
+                    textarea.innerText = 'OK';
+                }
+
+                // 必须触发 input 事件，否则发送按钮是禁用状态
+                textarea.dispatchEvent(new Event('input', { bubbles: true }));
+
+                setTimeout(() => {
+                    // 优先检查这个特定的发送按钮是否可用
+                    if (sendBtn && !sendBtn.disabled) {
+                        sendBtn.click();
+                    } else {
+                        // 如果按钮还是点不到，直接对输入框发送“回车”指令，这是最保险的
+                        const enterEvent = new KeyboardEvent('keydown', {
+                            key: 'Enter',
+                            keyCode: 13,
+                            code: 'Enter',
+                            which: 13,
+                            bubbles: true,
+                            cancelable: true
+                        });
+                        textarea.dispatchEvent(enterEvent);
+                    }
+                }, 50);
+            }
+        };
+    }
+
     // 创建固定切换开关
     let isPinned = false;
     const pinBtn = document.createElement('div');
@@ -149,7 +233,7 @@ function setupChatBoxToggle() {
         bottom: 0; 
         margin-left: 10px;
         white-space: nowrap;
-        background: #333; 
+        background: #F0FFDF; 
         color: white; 
         padding: 2px 8px; 
         border-radius: 4px; 
@@ -157,7 +241,7 @@ function setupChatBoxToggle() {
         font-size: 12px;
         z-index: 1001; 
         transition: all 0.2s ease;
-        border: 1px solid #555;
+        border: 1px solid #F0FFDF;
     `;
     inputArea.style.overflow = 'visible';
     inputArea.appendChild(pinBtn);
@@ -173,8 +257,8 @@ function setupChatBoxToggle() {
             inputArea.classList.remove('minimized-chat-box');
         } else {
             pinBtn.innerHTML = '📌';
-            pinBtn.style.background = '#333'; // 恢复深色，表示未固定
-            pinBtn.style.borderColor = '#555';
+            pinBtn.style.background = '#F0FFDF'; // 恢复深色，表示未固定
+            pinBtn.style.borderColor = '#F0FFDF';
         }
     });
 
